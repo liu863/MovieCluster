@@ -1,0 +1,38 @@
+ml-latest-small:
+user: 671, vote: 100004
+rate: 0.5, count: 1101, percentage: 1.10%
+rate: 1.0, count: 3326, percentage: 3.33%
+rate: 1.5, count: 1687, percentage: 1.69%
+rate: 2.0, count: 7271, percentage: 7.27%
+rate: 2.5, count: 4449, percentage: 4.45%
+rate: 3.0, count: 20064, percentage: 20.06%
+rate: 3.5, count: 10538, percentage: 10.54%
+rate: 4.0, count: 28750, percentage: 28.75%
+rate: 4.5, count: 7723, percentage: 7.72%
+rate: 5.0, count: 15095, percentage: 15.09%
+
+ml-20m:
+user: 138493, vote: 20000263
+rate: 0.5, count: 239125, percentage: 1.20%
+rate: 1.0, count: 680732, percentage: 3.40%
+rate: 1.5, count: 279252, percentage: 1.40%
+rate: 2.0, count: 1430997, percentage: 7.15%
+rate: 2.5, count: 883398, percentage: 4.42%
+rate: 3.0, count: 4291193, percentage: 21.46%
+rate: 3.5, count: 2200156, percentage: 11.00%
+rate: 4.0, count: 5561926, percentage: 27.81%
+rate: 4.5, count: 1534824, percentage: 7.67%
+rate: 5.0, count: 2898660, percentage: 14.49%
+
+ml-latest:
+user: 259137, vote: 24404096
+rate: 0.5, count: 361006, percentage: 1.48%
+rate: 1.0, count: 807991, percentage: 3.31%
+rate: 1.5, count: 369879, percentage: 1.52%
+rate: 2.0, count: 1681993, percentage: 6.89%
+rate: 2.5, count: 1145168, percentage: 4.69%
+rate: 3.0, count: 5011914, percentage: 20.54%
+rate: 3.5, count: 2840765, percentage: 11.64%
+rate: 4.0, count: 6620340, percentage: 27.13%
+rate: 4.5, count: 1984982, percentage: 8.13%
+rate: 5.0, count: 3580058, percentage: 14.67%
