@@ -10,6 +10,11 @@ public class Table {
     private Map<Integer, Integer> userIndex, indexUser;
     private List<double[]> ratings;
     
+    private Table(int row, int col) {
+        rowCount = row;
+        colCount = col;
+    }
+    
     public Table(Map<Integer, String> moviename, Map<Integer, Integer> movieindex) {
         rowCount = 0;
         colCount = moviename.size();
@@ -196,6 +201,37 @@ public class Table {
         return new HashMap<Integer, Integer>(indexMovie);
     }
     
+    public Table copy() {
+        Table tb = new Table(rowCount, colCount);
+        tb.setMovieName(movieName);
+        tb.setMovieMapping(movieIndex, indexMovie);
+        tb.setUserMapping(userIndex, indexUser);
+        tb.setRatings(ratings);
+        return tb;
+    }
+    
+    private void setMovieName(Map<Integer, String> moviename) {
+        movieName = new HashMap<Integer, String>(moviename);
+    }
+    
+    private void setMovieMapping(Map<Integer, Integer> movieindex, Map<Integer, Integer> indexmovie) {
+        movieIndex = new HashMap<Integer, Integer>(movieindex);
+        indexMovie = new HashMap<Integer, Integer>(indexmovie);
+    }
+    
+    private void setUserMapping(Map<Integer, Integer> userindex, Map<Integer, Integer> indexuser) {
+        userIndex = new HashMap<Integer, Integer>(userindex);
+        indexUser = new HashMap<Integer, Integer>(indexuser);
+    }
+    
+    private void setRatings(List<double[]> srcRatings) {
+        ratings = new ArrayList<double[]>();
+        for (int i = 0; i < srcRatings.size(); i++) {
+            double[] rates = new double[colCount];
+            System.arraycopy(srcRatings.get(i), 0, rates, 0, colCount);
+            ratings.add(rates);
+        }
+    }
     public void printTable() {
         printTable(null);
     }

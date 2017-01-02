@@ -11,7 +11,7 @@ public class Start {
         Map<Integer, String> movieName = new HashMap<Integer, String>();
         Map<Integer, Integer> movieIndex = new HashMap<Integer, Integer>();
         int id = 0, voteCount = 0, movieCount = 0;
-        Table tb = null;
+        Table tb = null, originalTable = null;
         try {
             BufferedReader movieReader = new BufferedReader(new FileReader(movies));
             String line = movieReader.readLine();
@@ -62,9 +62,19 @@ public class Start {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        if (tb == null) {
+            System.err.println("No table exist");
+            System.exit(1);
+        }
+        originalTable = tb.copy();
         
         while (true) {
-            System.out.println("\n\n1--Print statistics\n2--Print table\n3--Cluster users and movies\n4--Get single group info\nOthers--Exit");
+            System.out.println("\n\n1--Print statistics");
+            System.out.println("2--Print original table");
+            System.out.println("3--Print table");
+            System.out.println("4--Cluster users and movies");
+            System.out.println("5--Get single group info");
+            System.out.println("Others--Exit");
             Scanner sc = new Scanner(System.in);
             int choice = Integer.parseInt(sc.nextLine());
             if (choice == 1) {
@@ -78,10 +88,17 @@ public class Start {
                 }
             }
             else if (choice == 2) {
-                if (tb == null) {
-                    System.out.println("No valid table");
-                    continue;
+                System.out.println("Enter the name of output file");
+                String outfile = sc.nextLine();
+                if (outfile.equals("System.out")) {
+                    originalTable.printTable();
                 }
+                if (outfile.length() < 5 || !outfile.substring(outfile.length() - 4).equals(".txt")) {
+                    outfile += ".txt";
+                }
+                originalTable.printTable(outfile);
+            }
+            else if (choice == 3) {
                 System.out.println("Enter the name of output file");
                 String outfile = sc.nextLine();
                 if (outfile.equals("System.out")) {
@@ -92,11 +109,7 @@ public class Start {
                 }
                 tb.printTable(outfile);
             }
-            else if (choice == 3) {
-                if (tb == null) {
-                    System.out.println("No valid table");
-                    continue;
-                }
+            else if (choice == 4) {
                 int numCluster = 12;
                 int rowCount = tb.getRowCount(), colCount = tb.getColCount();
                 int numUser = rowCount / numCluster + 1;
@@ -134,13 +147,17 @@ public class Start {
                 }
                 System.out.println("done");
             }
-            else if (choice == 4) {
+            else if (choice == 5) {
             
             }
             else {
                 break;
             }
         }
+    }
+    
+    public static void clusterUser(Table tb) {
+    
     }
     
     public static double calCosVal(double[] v1, double[] v2) {
