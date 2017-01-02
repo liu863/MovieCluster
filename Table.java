@@ -1,5 +1,6 @@
 import java.util.*;
 import java.lang.*;
+import java.io.*;
 
 public class Table {
     
@@ -196,20 +197,39 @@ public class Table {
     }
     
     public void printTable() {
-        for (int i = 0; i < rowCount; i++) {
-            double[] rates = ratings.get(i);
-            for (int j = 0; j < colCount; j++) {
-                if (j > 0) {
-                    System.out.print(",");
+        printTable(null);
+    }
+    
+    public void printTable(String outfile) {
+        try {
+            BufferedWriter bw = null;
+            if (outfile != null) 
+                bw = new BufferedWriter(new FileWriter(outfile));
+            for (int i = 0; i < rowCount; i++) {
+                double[] rates = ratings.get(i);
+                StringBuilder sb = new StringBuilder();
+                for (int j = 0; j < colCount; j++) {
+                    if (j > 0) {
+                        sb.append(',');
+                    }
+                    if (rates[j] != 0) {
+                        sb.append(String.format("%.1f", rates[j]));
+                    }
+                    else {
+                        sb.append("   ");
+                    }
                 }
-                if (rates[j] != 0) {
-                    System.out.format("%.1f", rates[j]);
+                if (outfile != null) {
+                    bw.write(sb.toString(), 0, sb.length());
+                    bw.newLine();
                 }
                 else {
-                    System.out.print("   ");
+                    System.out.println(sb.toString());
                 }
             }
-            System.out.println();
+            if (bw != null) bw.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

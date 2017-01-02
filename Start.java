@@ -63,55 +63,83 @@ public class Start {
             e.printStackTrace();
         }
         
-        System.out.format("movie: %d, user: %d, vote: %d%n", movieName.size(), userSet.size(), voteCount);
-        PriorityQueue<Double> pq = new PriorityQueue<Double>(rateCount.keySet());
-        while (!pq.isEmpty()) {
-            Double d = pq.poll();
-            int i = rateCount.get(d);
-            double p = (double)i / voteCount * 100;
-            System.out.format("rate: %.1f, count: %d, percentage: %.2f%%%n", d, i, p);
-        }
-        
-        if (tb != null) {
-            tb.printTable();
-            
-            int numCluster = 12;
-            int rowCount = tb.getRowCount(), colCount = tb.getColCount();
-            int numUser = rowCount / numCluster + 1;
-            System.out.format("%d users in a cluster.%n", numUser);
-            int section = 0;
-            while (!userSet.isEmpty()) {
-                int srcUser = -1;
-                for (int i : userSet) {
-                    srcUser = i;
-                    break;
+        while (true) {
+            System.out.println("\n\n1--Print statistics\n2--Print table\n3--Cluster users and movies\n4--Get single group info\nOthers--Exit");
+            Scanner sc = new Scanner(System.in);
+            int choice = Integer.parseInt(sc.nextLine());
+            if (choice == 1) {
+                System.out.format("movie: %d, user: %d, vote: %d%n", movieName.size(), userSet.size(), voteCount);
+                PriorityQueue<Double> pq = new PriorityQueue<Double>(rateCount.keySet());
+                while (!pq.isEmpty()) {
+                    Double d = pq.poll();
+                    int i = rateCount.get(d);
+                    double p = (double)i / voteCount * 100;
+                    System.out.format("rate: %.1f, count: %d, percentage: %.2f%%%n", d, i, p);
                 }
-                userSet.remove(srcUser);
-                double[] srcVector = tb.getUserIdRate(srcUser);
-                List<Double> cosVal = new ArrayList<Double>();
-                List<Integer> tarUsers = new ArrayList<Integer>();
-                for (int tarUser : userSet) {
-                    double[] tarVector = tb.getUserIdRate(tarUser);
-                    double cos = calCosVal(srcVector, tarVector);
-                    //double cos = calSimilarity(srcVector, tarVector);
-                    for (int i = 0; i <= cosVal.size(); i++) {
-                        if (i == cosVal.size() || cos > cosVal.get(i)) {
-                            cosVal.add(i, cos);
-                            tarUsers.add(i, tarUser);
-                            break;
+            }
+            else if (choice == 2) {
+                if (tb == null) {
+                    System.out.println("No valid table");
+                    continue;
+                }
+                System.out.println("Enter the name of output file");
+                String outfile = sc.nextLine();
+                if (outfile.equals("System.out")) {
+                    tb.printTable();
+                }
+                if (outfile.length() < 5 || !outfile.substring(outfile.length() - 4).equals(".txt")) {
+                    outfile += ".txt";
+                }
+                tb.printTable(outfile);
+            }
+            else if (choice == 3) {
+                if (tb == null) {
+                    System.out.println("No valid table");
+                    continue;
+                }
+                int numCluster = 12;
+                int rowCount = tb.getRowCount(), colCount = tb.getColCount();
+                int numUser = rowCount / numCluster + 1;
+                System.out.format("%d users in a cluster.%n", numUser);
+                int section = 0;
+                while (!userSet.isEmpty()) {
+                    int srcUser = -1;
+                    for (int i : userSet) {
+                        srcUser = i;
+                        break;
+                    }
+                    userSet.remove(srcUser);
+                    double[] srcVector = tb.getUserIdRate(srcUser);
+                    List<Double> cosVal = new ArrayList<Double>();
+                    List<Integer> tarUsers = new ArrayList<Integer>();
+                    for (int tarUser : userSet) {
+                        double[] tarVector = tb.getUserIdRate(tarUser);
+                        double cos = calCosVal(srcVector, tarVector);
+                        //double cos = calSimilarity(srcVector, tarVector);
+                        for (int i = 0; i <= cosVal.size(); i++) {
+                            if (i == cosVal.size() || cos > cosVal.get(i)) {
+                                cosVal.add(i, cos);
+                                tarUsers.add(i, tarUser);
+                                break;
+                            }
                         }
                     }
+                    tb.swapUser(srcUser, tb.getIndexUser(section * numUser));
+                    for (int i = 1; i < numUser && !tarUsers.isEmpty(); i++) {
+                        int tarUser = tarUsers.remove(0);
+                        tb.swapUser(tarUser, tb.getIndexUser(section * numUser + i));
+                        userSet.remove(tarUser);
+                    }
+                    section++;
                 }
-                tb.swapUser(srcUser, tb.getIndexUser(section * numUser));
-                for (int i = 1; i < numUser && !tarUsers.isEmpty(); i++) {
-                    int tarUser = tarUsers.remove(0);
-                    tb.swapUser(tarUser, tb.getIndexUser(section * numUser + i));
-                    userSet.remove(tarUser);
-                }
-                section++;
+                System.out.println("done");
             }
-            System.out.println("\n\n");
-            tb.printTable();
+            else if (choice == 4) {
+            
+            }
+            else {
+                break;
+            }
         }
     }
     
