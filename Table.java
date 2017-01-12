@@ -105,7 +105,7 @@ public class Table {
     
     public double[] getUserIdRate(int userId) {
         if (!userIndex.containsKey(userId)) {
-            System.err.println("User does not exist.");
+            System.err.format("User does not exist. id: %d%n", userId);
             return null;
         }
         double[] ret = new double[colCount];
@@ -115,7 +115,7 @@ public class Table {
     
     public double[] getUserIndexRate(int userIndex) {
         if (userIndex < 0 || userIndex >= rowCount) {
-            System.err.println("Invalid user index.");
+            System.err.format("Invalid user index. index: %d%n", userIndex);
             return null;
         }
         double[] ret = new double[colCount];
@@ -123,9 +123,29 @@ public class Table {
         return ret;
     }
     
-    //Implement later
-    public double[] getMovieRate(int movieId) {
-        return null;
+    public double[] getMovieIdRate(int movieId) {
+        Integer index;
+        if ((index = movieIndex.get(movieId)) == null) {
+            System.err.format("Movie does not exist. id: %d%n", movieId);
+            return null;
+        }
+        double[] ret = new double[rowCount];
+        for (int i = 0; i < rowCount; i++) {
+            ret[i] = ratings.get(i)[index];
+        }
+        return ret;
+    }
+    
+    public double[] getMovieIndexRate(int movieIndex) {
+        if (movieIndex < 0 || movieIndex >= colCount) {
+            System.err.format("Invalid movieindex. index: %d%n", movieIndex);
+            return null;
+        }
+        double[] ret = new double[rowCount];
+        for (int i = 0; i < rowCount; i++) {
+            ret[i] = ratings.get(i)[movieIndex];
+        }
+        return ret;
     }
     
     public boolean swapUser(int userA, int userB) {
@@ -199,6 +219,14 @@ public class Table {
     
     public Map<Integer, Integer> getIndexMovieMap() {
         return new HashMap<Integer, Integer>(indexMovie);
+    }
+    
+    public Set<Integer> getUserSet() {
+        return new HashSet<Integer>(userIndex.keySet());
+    }
+    
+    public Set<Integer> getMovieSet() {
+        return new HashSet<Integer>(movieIndex.keySet());
     }
     
     public Table copy() {
